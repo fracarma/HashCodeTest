@@ -89,13 +89,10 @@ function createHorizontalArray(){
     var endPoint = null;
     for(var c = 0; c < picCols; c++){
       if(picture[r][c] === full && c != picCols-1){
-        if(startPoint){
-          if(endPoint <= c){
-            endPoint = c;
-          }
-        } else {
+        if(!startPoint){
           startPoint = c;
         }
+        endPoint = c;
       } else if ( (picture[r][c] !== full && startPoint && endPoint) ||
                   (startPoint && picture[r][c] === full && c == picCols-1)
       ){
