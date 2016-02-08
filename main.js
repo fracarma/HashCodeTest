@@ -25,11 +25,12 @@ picture.pop();
 var picRows = picture.length;
 var picCols = picture[0].length;
 
+/* --------------------- PICTURE SET FINISHED------------------------------------------ */
 
-//now, picture is a perfect matrix of points. nj element = picture[n][j]
+//FROM now, var picture is a perfect matrix of points. nj element = picture[n][j]
 
-var hArray = createHorizontalArray();
-var vArray = createVerticalArray();
+var hArray = createHorizontalArray(0,0,picRows,picCols);
+var vArray = createVerticalArray(0,0,picRows,picCols);
 
 var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
 
@@ -83,21 +84,21 @@ function createTrivialSolution(){
 }
 
 
-function createHorizontalArray(){
+function createHorizontalArray(startRow, startCol, endRow, endCol){
 
   var hArray = [];
 
-  for (var r = 0; r < picRows; r++) {
+  for (var r = startRow; r < endRow; r++) {
     var startPoint = null;
     var endPoint = null;
-    for(var c = 0; c < picCols; c++){
-      if(picture[r][c] === full && c != picCols-1){
+    for(var c = startCol; c < endCol; c++){
+      if(picture[r][c] === full && c != endCol-1){
         endPoint = c;
         if(startPoint == null){
           startPoint = c;
         }
       } else if ( (picture[r][c] !== full && startPoint != null && endPoint != null) ||
-                  (startPoint != null && picture[r][c] === full && c == picCols-1)
+                  (startPoint != null && picture[r][c] === full && c == endCol-1)
       ){
         if(picture[r][c] === full){
           endPoint = c;
@@ -111,21 +112,21 @@ function createHorizontalArray(){
   return hArray;
 }
 
-function createVerticalArray(){
+function createVerticalArray(startRow, startCol, endRow, endCol){
 
   var vArray = [];
 
-  for (var c = 0; c < picCols; c++) {
+  for (var c = startCol; c < endCol; c++) {
     var startPoint = null;
     var endPoint = null;
-    for(var r = 0; r < picRows; r++){
-      if(picture[r][c] === full && r != picRows-1){
+    for(var r = startRow; r < endRow; r++){
+      if(picture[r][c] === full && r != endRow-1){
         endPoint = r;
         if(startPoint == null){
           startPoint = r;
         }
       } else if ( (picture[r][c] !== full && startPoint != null && endPoint != null) ||
-                  (startPoint != null && picture[r][c] === full && r == picRows-1)
+                  (startPoint != null && picture[r][c] === full && r == endRow-1)
       ){
         if(picture[r][c] === full){
           endPoint = r;
