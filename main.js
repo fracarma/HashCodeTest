@@ -89,14 +89,14 @@ function createHorizontalArray(){
     var endPoint = null;
     for(var c = 0; c < picCols; c++){
       if(picture[r][c] === full && c != picCols-1){
-        if(!startPoint){
+        endPoint = c;
+        if(startPoint == null){
           startPoint = c;
         }
-        endPoint = c;
-      } else if ( (picture[r][c] !== full && startPoint && endPoint) ||
-                  (startPoint && picture[r][c] === full && c == picCols-1)
+      } else if ( (picture[r][c] !== full && startPoint != null && endPoint != null) ||
+                  (startPoint != null && picture[r][c] === full && c == picCols-1)
       ){
-        if(!endPoint){
+        if(picture[r][c] === full){
           endPoint = c;
         }
         hArray.push([r,startPoint,r,endPoint]);
