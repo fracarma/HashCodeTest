@@ -29,10 +29,13 @@ var picCols = picture[0].length;
 //now, picture is a perfect matrix of points. nj element = picture[n][j]
 
 var hArray = createHorizontalArray();
+var vArray = createVerticalArray();
 
-for (var i in hArray) {
-  if(hArray[i]){
-    var elem = hArray[i];
+var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
+
+for (var i in bestSolution) {
+  if(bestSolution[i]){
+    var elem = bestSolution[i];
     pushPaintLine(elem[0],elem[1],elem[2],elem[3]);
   }
 }
@@ -106,4 +109,32 @@ function createHorizontalArray(){
     }
   }
   return hArray;
+}
+
+function createVerticalArray(){
+
+  var vArray = [];
+
+  for (var c = 0; c < picCols; c++) {
+    var startPoint = null;
+    var endPoint = null;
+    for(var r = 0; r < picRows; r++){
+      if(picture[r][c] === full && r != picRows-1){
+        endPoint = r;
+        if(startPoint == null){
+          startPoint = r;
+        }
+      } else if ( (picture[r][c] !== full && startPoint != null && endPoint != null) ||
+                  (startPoint != null && picture[r][c] === full && r == picRows-1)
+      ){
+        if(picture[r][c] === full){
+          endPoint = r;
+        }
+        vArray.push([startPoint,c,endPoint,c]);
+        startPoint = null;
+        endPoint = null;
+      }
+    }
+  }
+  return vArray;
 }
