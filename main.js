@@ -2,7 +2,7 @@ var fs = require('fs');
 //var mathjs = require('mathjs');
 
 var buffer;
-var pathPicture = 'logo.in';
+var pathPicture = 'input/logo.in';
 //piture markers
 var empty = '.';
 var full = '#';
