@@ -1,7 +1,7 @@
 var fs = require('fs');
 //var mathjs = require('mathjs');
 var buffer;
-var pathPicture = 'input/testSquare.in';
+var pathPicture = 'input/logo.in';
 //piture markers
 var empty = '.';
 var full = '#';
@@ -20,6 +20,9 @@ picture = pictureFile.slice(0);
 picture.splice(0,1);
 //eliminate last row (is blank!)
 picture.pop();
+for (var i = 0; i < picture.length; i++) {
+  picture[i] = picture[i].split('');
+}
 
 var picRows = picture.length;
 var picCols = picture[0].length;
@@ -28,19 +31,20 @@ var picCols = picture[0].length;
 
 //FROM now, var picture is a perfect matrix of points. nj element = picture[n][j]
 
-// var hArray = createHorizontalArray(0,0,picRows,picCols);
-// var vArray = createVerticalArray(0,0,picRows,picCols);
-//
-// var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
-//
-// for (var i in bestSolution) {
-//   if(bestSolution[i]){
-//     var elem = bestSolution[i];
-//     pushPaintLine(elem[0],elem[1],elem[2],elem[3]);
-//   }
-// }
 
 createSquareArray(0,0,picRows,picCols);
+
+var hArray = createHorizontalArray(0,0,picRows,picCols);
+var vArray = createVerticalArray(0,0,picRows,picCols);
+
+var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
+
+for (var i in bestSolution) {
+  if(bestSolution[i]){
+    var elem = bestSolution[i];
+    pushPaintLine(elem[0],elem[1],elem[2],elem[3]);
+  }
+}
 outputSolution();
 
 
@@ -64,7 +68,6 @@ function outputSolution() {
 
   var file = fs.createWriteStream('solutions/solution'+Date.now()+'.txt');
   file.on('error', function(err){
-    console.log('ERROR on write solution:'+err);
   });
   solution.forEach(function(v){
     file.write(v + '\n');
@@ -142,11 +145,7 @@ function createVerticalArray(startRow, startCol, endRow, endCol){
 
 function createSquareArray(startRow, startCol, endRow, endCol) {
 
-  var pictureTmp = picture.slice(startRow,endRow);
-
-  for (var i in pictureTmp) {
-    pictureTmp[i]=pictureTmp[i].slice(startCol,endCol);
-  }
+  var pictureTmp = picture.slice(0);
 
   for (var c = startCol; c < endCol; c++) {
     for(var r = startRow; r < endRow; r++){
@@ -157,10 +156,9 @@ function createSquareArray(startRow, startCol, endRow, endCol) {
           for(var i = 0;i<=unitLength;i++){
             if(r+unitLength >= endRow -1 ||
                c+unitLength >= endCol -1 ||
-              pictureTmp[r+i][c+unitLength] === empty ||
-              pictureTmp[r+unitLength][c+i] === empty
+              pictureTmp[r+i][c+unitLength+1] === empty ||
+              pictureTmp[r+unitLength+1][c+i] === empty
             ){
-              console.log('isSquare = false ; r = '+r+'; c = '+c +'; length = '+unitLength);
               isSquare = false;
             }
           }
@@ -168,22 +166,24 @@ function createSquareArray(startRow, startCol, endRow, endCol) {
             unitLength++;
           }
         }
-        if(unitLength%2 === 0){
-          pushPaintSquare(r+unitLength/2,c+unitLength/2,unitLength/2);
-          for(var i = 0; i <= unitLength; i++){
-            for (var j = 0; j <= unitLength; j++) {
-              pictureTmp[i][j] = empty;
-            }
-          }
 
-        }
-        console.log(pictureTmp);
 
       }
+
+      if(unitLength%2 === 0){
+        pushPaintSquare(r+unitLength/2,c+unitLength/2,unitLength/2);
+        for(var i = r; i <= r + unitLength; i++){
+          for (var j = c; j <= c + unitLength; j++) {
+            pictureTmp[i][j] = empty;
+          }
+        }
+
+      }
+
 
     }
   }
 
-
+picture = pictureTmp;
 
 }
