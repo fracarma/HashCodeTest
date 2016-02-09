@@ -1,7 +1,7 @@
 var fs = require('fs');
 //var mathjs = require('mathjs');
 var buffer;
-var pathPicture = 'input/logo.in';
+var pathPicture = 'input/learn_and_teach.in';
 //piture markers
 var empty = '.';
 var full = '#';
@@ -32,7 +32,7 @@ var picCols = picture[0].length;
 //FROM now, var picture is a perfect matrix of points. nj element = picture[n][j]
 
 
-createSquareArray(0,0,picRows,picCols);
+//createSquareArray(0,0,picRows,picCols);
 
 var hArray = createHorizontalArray(0,0,picRows,picCols);
 var vArray = createVerticalArray(0,0,picRows,picCols);
@@ -109,6 +109,8 @@ function createHorizontalArray(startRow, startCol, endRow, endCol){
         hArray.push([r,startPoint,r,endPoint]);
         startPoint = null;
         endPoint = null;
+      } else if (picture[r][c] === full && c == endCol-1 && startPoint == null){
+        hArray.push([r,c,r,c]);
       }
     }
   }
