@@ -1,8 +1,7 @@
 var fs = require('fs');
 //var mathjs = require('mathjs');
-
 var buffer;
-var pathPicture = 'input/logo.in';
+var pathPicture = 'input/testSquare.in';
 //piture markers
 var empty = '.';
 var full = '#';
@@ -29,18 +28,19 @@ var picCols = picture[0].length;
 
 //FROM now, var picture is a perfect matrix of points. nj element = picture[n][j]
 
-var hArray = createHorizontalArray(0,0,picRows,picCols);
-var vArray = createVerticalArray(0,0,picRows,picCols);
+// var hArray = createHorizontalArray(0,0,picRows,picCols);
+// var vArray = createVerticalArray(0,0,picRows,picCols);
+//
+// var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
+//
+// for (var i in bestSolution) {
+//   if(bestSolution[i]){
+//     var elem = bestSolution[i];
+//     pushPaintLine(elem[0],elem[1],elem[2],elem[3]);
+//   }
+// }
 
-var bestSolution = (hArray.length < vArray.length) ? hArray : vArray;
-
-for (var i in bestSolution) {
-  if(bestSolution[i]){
-    var elem = bestSolution[i];
-    pushPaintLine(elem[0],elem[1],elem[2],elem[3]);
-  }
-}
-
+createSquareArray(0,0,picRows,picCols);
 outputSolution();
 
 
@@ -138,4 +138,52 @@ function createVerticalArray(startRow, startCol, endRow, endCol){
     }
   }
   return vArray;
+}
+
+function createSquareArray(startRow, startCol, endRow, endCol) {
+
+  var pictureTmp = picture.slice(startRow,endRow);
+
+  for (var i in pictureTmp) {
+    pictureTmp[i]=pictureTmp[i].slice(startCol,endCol);
+  }
+
+  for (var c = startCol; c < endCol; c++) {
+    for(var r = startRow; r < endRow; r++){
+      var unitLength = 1;
+      var isSquare = true;
+      if(pictureTmp[r][c] === full){
+        while(isSquare){
+          for(var i = 0;i<=unitLength;i++){
+            if(r+unitLength >= endRow -1 ||
+               c+unitLength >= endCol -1 ||
+              pictureTmp[r+i][c+unitLength] === empty ||
+              pictureTmp[r+unitLength][c+i] === empty
+            ){
+              console.log('isSquare = false ; r = '+r+'; c = '+c +'; length = '+unitLength);
+              isSquare = false;
+            }
+          }
+          if(isSquare){
+            unitLength++;
+          }
+        }
+        if(unitLength%2 === 0){
+          pushPaintSquare(r+unitLength/2,c+unitLength/2,unitLength/2);
+          for(var i = 0; i <= unitLength; i++){
+            for (var j = 0; j <= unitLength; j++) {
+              pictureTmp[i][j] = empty;
+            }
+          }
+
+        }
+        console.log(pictureTmp);
+
+      }
+
+    }
+  }
+
+
+
 }
