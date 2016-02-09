@@ -183,7 +183,7 @@ function createSquareArray(startRow, startCol, endRow, endCol) {
 
     }
   }
-
+console.log(pictureTmp);
 picture = pictureTmp;
 
 }
